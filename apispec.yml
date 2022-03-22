@@ -1,0 +1,237 @@
+openapi: '3.0.3'
+
+info:
+    title: 'W5D2 - Gorm and code restructuring'
+    version: '1.0.0'
+    description: "Alta's task to learn and experiments regarding how to implement an API server with the help of gorm"
+    contact:
+        name: 'Wildani'
+        email: 'badar.wildanie@gmail.com'
+        url: 'https://badar-blog.blogspot.com'
+components:
+    schemas:
+        user_request:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: 'john'
+                email:
+                    type: string
+                    example: 'john@mail.com'
+                password:
+                    type: string
+                    example: 'john123'
+        user_response:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    example: 1
+                name:
+                    type: string
+                    example: 'john'
+                email:
+                    type: string
+                    example: 'john@mail.com'
+                password:
+                    type: string
+                    example: 'john123'
+
+paths:
+    /users:
+        get:
+            description: 'Get list of users available'
+            summary: 'list of users'
+            responses:
+                '200':
+                    description: 'Success getting list of users'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "success getting user's lists"
+                                    users:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/user_response'
+
+        post:
+            description: 'Create a single user'
+            summary: 'create single user'
+            requestBody:
+                description: 'Requirement to create a user'
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user_request'
+
+            responses:
+                '200':
+                    description: 'Success creating a user'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'success creating user'
+                                    user:
+                                        $ref: '#/components/schemas/user_response'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'Server error'
+
+    /users/{id}:
+        get:
+            description: 'Get a spesific user by id'
+            summary: 'Get a single user'
+            parameters:
+                - name: 'id'
+                  description: "User's id"
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+
+            responses:
+                '200':
+                    description: 'Success getting single user'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'success getting single user'
+                                    user:
+                                        $ref: '#/components/schemas/user_response'
+                '400':
+                    description: 'User id not found'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'No user matched with requested ID'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'Server error'
+
+        put:
+            description: 'Update a specific user'
+            summary: 'Update user'
+            parameters:
+                - name: 'id'
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                description: "User's data payload to update"
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/user_request'
+
+            responses:
+                '200':
+                    description: 'Success updating a user'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'success updating a user'
+                                    data:
+                                        $ref: '#/components/schemas/user_response'
+                '400':
+                    description: 'User id not found'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'No user matched with requested ID'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'Server error'
+        delete:
+            description: 'Delete a specific user'
+            summary: 'delete a user'
+            parameters:
+                - name: 'id'
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+
+            responses:
+                '200':
+                    description: 'Success deleting a user'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'Success delete a user'
+                                    data:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: integer
+                                                example: 1
+                '400':
+                    description: 'User id not found'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'No user matched with requested ID'
+                '500':
+                    description: 'Server error'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: 'Server error'
